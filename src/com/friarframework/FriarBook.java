@@ -16,6 +16,7 @@ import org.json.JSONTokener;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -147,6 +148,9 @@ public class FriarBook extends Activity {
 			InputStream instream = getAssets().open("book/book.json");
 			String json = convertStreamToString(instream);
 			JSONObject jsonObject = (JSONObject) new JSONTokener(json).nextValue();
+			if (jsonObject.getString("orientation").equals("landscape")) {
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			}
 			JSONArray contents = jsonObject.getJSONArray("contents");
 
 			for (int index = 0; index < contents.length(); index++) {

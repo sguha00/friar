@@ -96,6 +96,10 @@ public class FriarBook extends FragmentActivity {
 		super.onRestoreInstanceState(savedInstanceState);
 		currentPage = savedInstanceState.getInt("currentPage");
 	}
+	
+	public void pageTo(String filename) {
+		pager.setCurrentItem(bData.getIndex(filename), true);
+	}
 
 //	private void showUrl(int pageNum) {
 //		assert pageNum >= 0 && pageNum < totalPages;

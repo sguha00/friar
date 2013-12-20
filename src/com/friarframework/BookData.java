@@ -40,6 +40,10 @@ public class BookData {
 		return htmlFiles.get(index);
 	}
 	
+	public int getIndex(String filename) {
+		return htmlMap.get(filename);
+	}
+	
 	private void loadData(Context context) {
 		try {
 			InputStream instream = context.getAssets().open("book/book.json");

@@ -1,20 +1,13 @@
 package com.friarframework;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.KeyEvent;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 public class FriarBook extends FragmentActivity {
@@ -25,10 +18,11 @@ public class FriarBook extends FragmentActivity {
 
 	WebView webView;
 	BookData bData;
-	int currentPage = 0;
+	int restorePage = 0;
 
 	ViewPager pager;
-    FragmentStatePagerAdapter adapter; 
+    FragmentStatePagerAdapter adapter;
+    private SharedPreferences mPrefs;
   
     /* Just some random URLs
     * 
@@ -72,31 +66,34 @@ public class FriarBook extends FragmentActivity {
         };
    
         //Let the pager know which adapter it is supposed to use
-        pager.setAdapter(adapter);  
-	}
-
-	// Handle Android physical back button.
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
-			webView.goBack();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-		super.onSaveInstanceState(savedInstanceState);
-		savedInstanceState.putInt("currentPage", currentPage);
-	}
-
-	@Override
-	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-		currentPage = savedInstanceState.getInt("currentPage");
+        pager.setAdapter(adapter);
+        
+        mPrefs =  getPreferences(MODE_PRIVATE);
+        restorePage = mPrefs.getInt("restorePage", 0);
+        
+        if (restorePage != 0) {
+        	pager.setCurrentItem(restorePage);
+        }
 	}
 	
+	public void onPause() {
+        super.onPause();
+
+        SharedPreferences.Editor ed = mPrefs.edit();
+        ed.putInt("restorePage", pager.getCurrentItem());
+        ed.commit();
+    }
+
+	// Handle Android physical back button.
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
+//			webView.goBack();
+//			return true;
+//		}
+//		return super.onKeyDown(keyCode, event);
+//	}
+		
 	public void pageTo(String filename) {
 		pager.setCurrentItem(bData.getIndex(filename), true);
 	}
@@ -116,29 +113,4 @@ public class FriarBook extends FragmentActivity {
 		System.out.println(text);
 	}
 
-	class FriarWebViewClient extends WebViewClient {
-		@Override
-		public void onPageStarted(WebView view, String url, Bitmap favicon) {
-			try {
-				URI uri = new URI(url);
-				String[] segments = uri.getPath().split("/");
-				String filename = segments[segments.length - 1];
-//				currentPage = htmlMap.get(filename);
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-			System.out.println(currentPage + " " + url);
-		}
-
-        @Override
-		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-	        if (url != null && url.startsWith("http://")) {
-	            view.getContext().startActivity(
-	                new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-	            return true;
-	        } else {
-	            return false;
-	        }
-	    }
-	}
 }

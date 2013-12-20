@@ -4,7 +4,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -42,18 +41,6 @@ public class BrowserFragment extends Fragment {
 	}
 
 	class FriarWebViewClient extends WebViewClient {
-		@Override
-		public void onPageStarted(WebView view, String url, Bitmap favicon) {
-			try {
-				URI uri = new URI(url);
-				String[] segments = uri.getPath().split("/");
-				String filename = segments[segments.length - 1];
-				// currentPage = htmlMap.get(filename);
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-			// System.out.println(currentPage + " " + url);
-		}
 
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {

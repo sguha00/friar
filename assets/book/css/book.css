@@ -175,9 +175,9 @@ img.right {
 
 #page.chapter #content {
   min-height: 1024px;
-  width: 530px;
+/*  width: 530px;*/
   
-  margin: 120px auto;
+  margin: 120px 40px;
 }
 
 #page.chapter p,

@@ -32,12 +32,6 @@ public class FriarBook extends FragmentActivity {
     * Swiping, to the right will take you to the next page having
     * the next URL.
     */
-//     String[] toVisit={
-//        "http://www.jdepths.com",
-//        "http://www.google.com",
-//        "http://www.reddit.com/.compact",
-//        "http://www.dribbble.com",
-//    };
 
 	/** Called when the activity is first created. */
 	@Override

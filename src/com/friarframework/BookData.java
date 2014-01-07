@@ -16,6 +16,8 @@ import android.content.Context;
 
 public class BookData {
 	
+	public static final String ASSET_DIR = "ddf-assets";
+	
 	private static BookData mInstance = null;
 	
 	private List<String> htmlFiles = new ArrayList<String>();
@@ -46,7 +48,7 @@ public class BookData {
 	
 	private void loadData(Context context) {
 		try {
-			InputStream instream = context.getAssets().open("book/book.json");
+			InputStream instream = context.getAssets().open(ASSET_DIR + "/book.json");
 			String json = convertStreamToString(instream);
 			JSONObject jsonObject = (JSONObject) new JSONTokener(json).nextValue();
 //			if (jsonObject.getString("orientation").equals("landscape")) {
